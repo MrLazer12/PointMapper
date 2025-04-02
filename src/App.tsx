@@ -2,11 +2,12 @@ import React, {useEffect, useState} from "react";
 import CardProduct from "./components/card-product/card.tsx";
 import dataJSON from './data.json';
 import GoogleMapComponent from "./components/google-map/GoogleMap.tsx";
-import {zoomPointCoordinates} from "./interfaces/interfaces.main.tsx";
+import {AddressData, zoomPointCoordinates} from "./interfaces/interfaces.main.tsx";
 
 const App: React.FC = () => {
-    const [data, setData] = useState<any[] | null>(null);
+    const [data, setData] = useState<AddressData[] | null>(null);
     const [zoomPointCoordinates, setZoomPointCoordinates] = useState<zoomPointCoordinates | null>(null);
+    const [zoom, setZoom] = useState(12);
 
     const getProducts = async () => {
         setData(dataJSON);
@@ -20,9 +21,16 @@ const App: React.FC = () => {
         // }
     };
 
-    const zoomToCardPoint = (latitude: number, longitude: number) => {
-        setZoomPointCoordinates({latitude, longitude});
-    }
+    const zoomToCardPoint = (point: zoomPointCoordinates) => {
+        if (point && point.latitude !== null && point.longitude !== null) {
+            setZoomPointCoordinates({
+                latitude: point.latitude,
+                longitude: point.longitude
+            });
+        } else {
+            setZoomPointCoordinates(null);
+        }
+    };
 
     useEffect(() => {
         getProducts();
@@ -32,9 +40,10 @@ const App: React.FC = () => {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start">
             <div className="grid grid-cols-2 w-full h-screen">
                 <section className="py-12 px-4 overflow-auto">
-                    <div className="grid grid-cols-3 gap-6">
-                        {data?.map((dataCurrent: any, index) => (
+                    <div className="grid grid-cols-3 gap-16">
+                        {data?.map((dataCurrent: AddressData, index) => (
                             <CardProduct
+                                setZoom={setZoom}
                                 zoomToCardPoint={zoomToCardPoint}
                                 key={index}
                                 indexCard={index}
@@ -45,7 +54,11 @@ const App: React.FC = () => {
                 </section>
 
                 <section className="h-full">
-                    <GoogleMapComponent data={data} zoomPointCoordinates={zoomPointCoordinates}/>
+                    <GoogleMapComponent
+                        data={data}
+                        zoomPointCoordinates={zoomPointCoordinates}
+                        zoomOriginal={zoom}
+                    />
                 </section>
             </div>
         </div>

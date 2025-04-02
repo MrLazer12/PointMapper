@@ -1,15 +1,16 @@
 import {GoogleMap, LoadScript, Marker} from "@react-google-maps/api";
 import React, {useEffect, useState, useRef} from "react";
-import {zoomPointCoordinates} from "../../interfaces/interfaces.main.tsx";
+import {AddressData, zoomPointCoordinates} from "../../interfaces/interfaces.main.tsx";
 
 const apiKeyForMaps = import.meta.env.GOOGLE_MAPS_API_KEY;
 
 interface GoogleMapProps {
-    data: any;
+    data: AddressData[] | null;
     zoomPointCoordinates: zoomPointCoordinates | null;
+    zoomOriginal: number;
 }
 
-const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinates}) => {
+const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinates, zoomOriginal}) => {
     const containerStyle = {
         width: "100%",
         height: "100%",
@@ -29,7 +30,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinate
         }
         : {lat: 30.32526, lng: -97.69927};
 
-    const [zoom, setZoom] = useState(12);
+    const [zoom, setZoom] = useState(zoomOriginal);
     const [mapCenter, setMapCenter] = useState(center);
     const mapRef = useRef<any>(null);
 
@@ -53,7 +54,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinate
     };
 
     useEffect(() => {
-        setZoom(12);
+        setZoom(zoomOriginal);
 
         const timeout = setTimeout(() => {
             if (zoomPointCoordinates) {
@@ -64,6 +65,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinate
                 slowZoom(20, targetCenter);
             } else {
                 setMapCenter(center);
+                setZoom(zoomOriginal);
             }
         }, 565);
 
