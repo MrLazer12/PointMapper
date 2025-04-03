@@ -1,5 +1,6 @@
 import React from "react";
 import {AddressData, zoomPointCoordinates} from "../../interfaces/interfaces.main.tsx";
+import {useNavigate} from "react-router-dom";
 
 interface ProductProps {
     dataCurrent: AddressData;
@@ -10,11 +11,18 @@ interface ProductProps {
 }
 
 const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCardPoint, setZoom, setCenterOriginal}) => {
+    const navigate = useNavigate();
+
     const handleCardClick = () => {
         zoomToCardPoint({
             latitude: dataCurrent.latitude,
             longitude: dataCurrent.longitude
         });
+    };
+
+    const redirectToPageInfo = () => {
+        localStorage.setItem('dataCurrentInfo', JSON.stringify(dataCurrent));
+        navigate('/info');
     };
 
     const handleCardMouseOut = () => {
@@ -27,6 +35,7 @@ const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCard
 
     return (
         <div
+            onClick={redirectToPageInfo}
             onMouseEnter={handleCardClick}
             onMouseLeave={handleCardMouseOut}
             className="rounded-xl overflow-hidden shadow-lg bg-white transform transition-all hover:scale-105 hover:shadow-xl duration-300 ease-in-out py-3"
