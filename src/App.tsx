@@ -8,6 +8,10 @@ const App: React.FC = () => {
     const [data, setData] = useState<AddressData[] | null>(null);
     const [zoomPointCoordinates, setZoomPointCoordinates] = useState<zoomPointCoordinates | null>(null);
     const [zoom, setZoom] = useState(12);
+    const [centerOriginal, setCenterOriginal] = useState<zoomPointCoordinates>({
+        latitude: 30.32526,
+        longitude: -97.69927
+    });
 
     const getProducts = async () => {
         setData(dataJSON);
@@ -44,6 +48,7 @@ const App: React.FC = () => {
                         {data?.map((dataCurrent: AddressData, index) => (
                             <CardProduct
                                 setZoom={setZoom}
+                                setCenterOriginal={setCenterOriginal}
                                 zoomToCardPoint={zoomToCardPoint}
                                 key={index}
                                 indexCard={index}
@@ -58,6 +63,7 @@ const App: React.FC = () => {
                         data={data}
                         zoomPointCoordinates={zoomPointCoordinates}
                         zoomOriginal={zoom}
+                        centerOriginal={centerOriginal}
                     />
                 </section>
             </div>

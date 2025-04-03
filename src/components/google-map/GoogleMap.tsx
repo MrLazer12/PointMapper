@@ -7,10 +7,11 @@ const apiKeyForMaps = import.meta.env.GOOGLE_MAPS_API_KEY;
 interface GoogleMapProps {
     data: AddressData[] | null;
     zoomPointCoordinates: zoomPointCoordinates | null;
+    centerOriginal: zoomPointCoordinates;
     zoomOriginal: number;
 }
 
-const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinates, zoomOriginal}) => {
+const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinates, zoomOriginal, centerOriginal}) => {
     const containerStyle = {
         width: "100%",
         height: "100%",
@@ -28,7 +29,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinate
             lat: locations.reduce((sum, loc) => sum + loc.lat, 0) / locations.length,
             lng: locations.reduce((sum, loc) => sum + loc.lng, 0) / locations.length,
         }
-        : {lat: 30.32526, lng: -97.69927};
+        : {lat: centerOriginal.latitude, lng: centerOriginal.longitude};
 
     const [zoom, setZoom] = useState(zoomOriginal);
     const [mapCenter, setMapCenter] = useState(center);
@@ -52,6 +53,11 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({data, zoomPointCoordinate
             }, 100);
         }
     };
+
+    useEffect(() => {
+        setMapCenter(center);
+        setZoom(zoomOriginal);
+    }, [centerOriginal]);
 
     useEffect(() => {
         setZoom(zoomOriginal);

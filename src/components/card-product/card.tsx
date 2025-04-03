@@ -4,11 +4,12 @@ import {AddressData, zoomPointCoordinates} from "../../interfaces/interfaces.mai
 interface ProductProps {
     dataCurrent: AddressData;
     setZoom: React.Dispatch<React.SetStateAction<number>>;
+    setCenterOriginal: React.Dispatch<React.SetStateAction<zoomPointCoordinates>>;
     indexCard: number;
     zoomToCardPoint: (point: zoomPointCoordinates) => void;
 }
 
-const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCardPoint, setZoom}) => {
+const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCardPoint, setZoom, setCenterOriginal}) => {
     const handleCardClick = () => {
         zoomToCardPoint({
             latitude: dataCurrent.latitude,
@@ -17,7 +18,11 @@ const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCard
     };
 
     const handleCardMouseOut = () => {
-        console.warn('handleCardMouseOut');
+        setZoom(12);
+        setCenterOriginal({
+            latitude: 30.32526,
+            longitude: -97.69927
+        });
     };
 
     return (
