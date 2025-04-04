@@ -28,7 +28,7 @@ const InfoPage: React.FC = () => {
     } = dataCurrent;
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-6 lg:px-8">
+        <div className="min-h-screen container bg-gray-50 py-12 px-6 lg:px-8">
             <SliderImages
                 images={images}
             />
