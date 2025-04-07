@@ -8,9 +8,10 @@ interface ProductProps {
     setCenterOriginal: React.Dispatch<React.SetStateAction<zoomPointCoordinates>>;
     indexCard: number;
     zoomToCardPoint: (point: zoomPointCoordinates) => void;
+    handleZoomBack: () => void;
 }
 
-const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCardPoint, setZoom, setCenterOriginal}) => {
+const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCardPoint, handleZoomBack}) => {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -26,11 +27,7 @@ const CardProduct: React.FC<ProductProps> = ({dataCurrent, indexCard, zoomToCard
     };
 
     const handleCardMouseOut = () => {
-        setZoom(12);
-        setCenterOriginal({
-            latitude: 30.32526,
-            longitude: -97.69927
-        });
+        handleZoomBack();
     };
 
     return (

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AddressData, zoomPointCoordinates} from "../interfaces/interfaces.main.tsx";
 import CardProduct from "../components/card-product/card.tsx";
-import GoogleMapComponent from "../components/google-map/GoogleMap.tsx";
+import GoogleMapComponent, {GoogleMapHandle} from "../components/google-map/GoogleMap.tsx";
 import dataJSON from './../data.json';
 
 const HomePage: React.FC = () => {
@@ -12,6 +12,7 @@ const HomePage: React.FC = () => {
         latitude: 30.32526,
         longitude: -97.69927
     });
+    const mapRef = useRef<GoogleMapHandle>(null);
 
     const getProducts = async () => {
         setData(dataJSON);
@@ -36,6 +37,10 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const handleZoomBack = () => {
+        mapRef.current?.zoomBack();
+    };
+
     useEffect(() => {
         getProducts();
     }, []);
@@ -47,6 +52,7 @@ const HomePage: React.FC = () => {
                     <div className="grid grid-cols-3 gap-16">
                         {data?.map((dataCurrent: AddressData, index) => (
                             <CardProduct
+                                handleZoomBack={handleZoomBack}
                                 setZoom={setZoom}
                                 setCenterOriginal={setCenterOriginal}
                                 zoomToCardPoint={zoomToCardPoint}
@@ -60,6 +66,7 @@ const HomePage: React.FC = () => {
 
                 <section className="h-full">
                     <GoogleMapComponent
+                        ref={mapRef}
                         data={data}
                         zoomPointCoordinates={zoomPointCoordinates}
                         zoomOriginal={zoom}
